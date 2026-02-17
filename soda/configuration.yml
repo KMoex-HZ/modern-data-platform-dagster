@@ -1,4 +1,3 @@
 data_source analytics:
   type: duckdb
   path: "{{ env_var('DUCKDB_PATH') }}"
-  schema: main

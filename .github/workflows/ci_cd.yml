@@ -1,0 +1,29 @@
+name: Data Pipeline CI
+on: [push]
+
+jobs:
+  data-quality-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install dbt-duckdb soda-core-duckdb dagster pandas faker
+
+      - name: Build Data (Phase 1 & 2)
+        run: |
+          # Kita generate data mentah dulu buat simulasi di server GitHub
+          python dagster_project/fake_data_gen.py
+          cd dbt_project
+          dbt build --profiles-dir .
+
+      - name: Quality Check (Phase 3)
+        run: |
+          soda scan -d analytics -c soda/configuration.yml soda/checks.yml

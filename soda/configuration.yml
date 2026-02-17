@@ -1,0 +1,3 @@
+data_source analytics:
+  type: duckdb
+  path: /home/caelan/projects/modern-data-platform-dagster/analytics.duckdb

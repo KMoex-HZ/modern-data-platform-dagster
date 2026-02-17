@@ -1,0 +1,17 @@
+checks for fact_orders:
+  # 1. Gak boleh ada ID order yang kosong
+  - missing_count(order_id) = 0
+
+  # 2. Total belanja gak boleh nol atau negatif (Gak logis soalnya)
+  - min(total_amount) > 0
+
+  # 3. Gak boleh ada ID yang duplikat
+  - duplicate_count(order_id) = 0
+
+checks for dim_users:
+  # 1. User name wajib ada
+  - missing_count(user_name) = 0
+
+  # 2. Status record harus 'Active' atau 'Historical'
+  - invalid_count(record_status) = 0:
+      valid values: ["Active", "Historical"]

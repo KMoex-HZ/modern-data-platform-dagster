@@ -1,5 +1,3 @@
 data_source analytics:
   type: duckdb
-  # Using Soda's Jinja environment variable syntax
-  path: "{{ env_var('DUCKDB_PATH') | default('analytics.duckdb') }}"
-  schema: main
+  path: "{{ env_var('DUCKDB_PATH') }}"

@@ -15,7 +15,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install dbt-duckdb soda-core-duckdb pandas faker duckdb pyarrow sqlalchemy duckdb-engine
+          pip install dbt-duckdb soda-core-duckdb pandas faker duckdb pyarrow sqlalchemy duckdb-engine setuptools
 
       - name: Ingest & Build Data
         run: |

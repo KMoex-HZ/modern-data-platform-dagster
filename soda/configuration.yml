@@ -1,5 +1,4 @@
 data_source analytics:
   type: duckdb
-  # Using environment variables for the database path to ensure portability
-  # across local, Docker, and CI/CD environments.
-  path: ${DUCKDB_PATH:-analytics.duckdb}
+  # Using Soda's Jinja environment variable syntax
+  path: "{{ env_var('DUCKDB_PATH') | default('analytics.duckdb') }}"

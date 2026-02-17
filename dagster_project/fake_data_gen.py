@@ -23,16 +23,23 @@ def generate_and_save_data():
     df_products = pd.DataFrame(products)
     df_orders = pd.DataFrame(orders)
 
-    # 2. SIMPAN KE DUCKDB (Ini yang bikin GitHub Actions gak merah lagi)
+    # 2. SIMPAN KE DUCKDB (Lebih aman buat GitHub Actions)
     con = duckdb.connect(db_path)
-    con.execute("CREATE TABLE IF NOT EXISTS raw_users AS SELECT * FROM df_users")
-    con.execute("CREATE TABLE IF NOT EXISTS raw_products AS SELECT * FROM df_products")
-    con.execute("CREATE TABLE IF NOT EXISTS raw_orders AS SELECT * FROM df_orders")
     
-    # Kalau tabel udah ada, kita replace isinya biar fresh
-    con.execute("INSERT OR REPLACE INTO raw_users SELECT * FROM df_users")
-    con.execute("INSERT OR REPLACE INTO raw_products SELECT * FROM df_products")
-    con.execute("INSERT OR REPLACE INTO raw_orders SELECT * FROM df_orders")
+    # Daftarkan dataframe sebagai view sementara agar DuckDB bisa baca
+    con.register("df_users_temp", df_users)
+    con.register("df_products_temp", df_products)
+    con.register("df_orders_temp", df_orders)
+
+    # Buat tabel asli dari view tersebut
+    con.execute("CREATE TABLE IF NOT EXISTS raw_users AS SELECT * FROM df_users_temp")
+    con.execute("CREATE TABLE IF NOT EXISTS raw_products AS SELECT * FROM df_products_temp")
+    con.execute("CREATE TABLE IF NOT EXISTS raw_orders AS SELECT * FROM df_orders_temp")
+    
+    # Refresh data jika sudah ada
+    con.execute("OR REPLACE TABLE raw_users AS SELECT * FROM df_users_temp")
+    con.execute("OR REPLACE TABLE raw_products AS SELECT * FROM df_products_temp")
+    con.execute("OR REPLACE TABLE raw_orders AS SELECT * FROM df_orders_temp")
     
     con.close()
     print(f"✅ Success: Data ingested into {db_path}")

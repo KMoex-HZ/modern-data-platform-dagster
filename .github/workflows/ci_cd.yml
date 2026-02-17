@@ -15,7 +15,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install dbt-duckdb soda-core-duckdb pandas faker duckdb
+          pip install dbt-duckdb soda-core-duckdb pandas faker duckdb pyarrow
 
       - name: Ingest & Build Data
         run: |
@@ -32,3 +32,8 @@ jobs:
           # Sesuaikan path di configuration.yml secara dinamis buat GitHub
           sed -i 's|path:.*|path: /home/runner/work/modern-data-platform-dagster/modern-data-platform-dagster/analytics.duckdb|' soda/configuration.yml
           soda scan -d analytics -c soda/configuration.yml soda/checks.yml
+
+      - name: Generate dbt Docs
+        run: |
+          cd dbt_project
+          dbt docs generate --profiles-dir .

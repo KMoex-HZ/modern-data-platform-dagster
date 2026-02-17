@@ -1,4 +1,4 @@
-checks for fact_orders:
+checks for main.fact_orders:
   # 1. Ensure primary key integrity: order_id must not contain null values
   - missing_count(order_id) = 0
 
@@ -8,7 +8,7 @@ checks for fact_orders:
   # 3. Uniqueness Check: prevents duplicate transactions in the fact table
   - duplicate_count(order_id) = 0
 
-checks for dim_users:
+checks for main.dim_users:
   # 1. Data Completeness: user_name is mandatory for downstream reporting
   - missing_count(user_name) = 0
 

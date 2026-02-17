@@ -35,7 +35,7 @@ jobs:
 
       - name: Execute Soda Quality Scans
         run: |
-          # No manual path patching needed thanks to environment variables
+          sed -i "s|PATH_PLACEHOLDER|$DUCKDB_PATH|g" soda/configuration.yml
           soda scan -d analytics -c soda/configuration.yml soda/checks.yml
 
       - name: Generate dbt Documentation

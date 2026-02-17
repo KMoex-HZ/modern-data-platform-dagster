@@ -10,9 +10,9 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DAGSTER_POSTGRES_USER=postgres
-      - DAGSTER_POSTGRES_PASSWORD=password
-      - DAGSTER_POSTGRES_DB=postgres
+      - DAGSTER_POSTGRES_USER=${DAGSTER_POSTGRES_USER:-postgres}
+      - DAGSTER_POSTGRES_PASSWORD=${DAGSTER_POSTGRES_PASSWORD:-password}
+      - DAGSTER_POSTGRES_DB=${DAGSTER_POSTGRES_DB:-postgres}
     env_file:
       - .env
 

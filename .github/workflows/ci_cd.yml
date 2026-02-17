@@ -15,15 +15,20 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install dbt-duckdb soda-core-duckdb dagster pandas faker
+          pip install dbt-duckdb soda-core-duckdb pandas faker duckdb
 
-      - name: Build Data (Phase 1 & 2)
+      - name: Ingest & Build Data
         run: |
-          # Kita generate data mentah dulu buat simulasi di server GitHub
+          # Jalanin generator (Bikin analytics.duckdb di root)
           python dagster_project/fake_data_gen.py
-          cd dbt_project
-          dbt build --profiles-dir .
 
-      - name: Quality Check (Phase 3)
+          # Masuk ke dbt
+          cd dbt_project
+          dbt snapshot --profiles-dir .
+          dbt run --profiles-dir .
+
+      - name: Quality Check
         run: |
+          # Sesuaikan path di configuration.yml secara dinamis buat GitHub
+          sed -i 's|path:.*|path: /home/runner/work/modern-data-platform-dagster/modern-data-platform-dagster/analytics.duckdb|' soda/configuration.yml
           soda scan -d analytics -c soda/configuration.yml soda/checks.yml

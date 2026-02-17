@@ -5,6 +5,7 @@ with source as (
 renamed as (
     select
         product_id,
+        -- Normalizing column names for downstream consistency
         name as product_name,
         category,
         price

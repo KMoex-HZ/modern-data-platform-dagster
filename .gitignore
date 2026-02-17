@@ -1,18 +1,19 @@
-# Python
+# Python environment and bytecode
 venv/
 __pycache__/
 *.pyc
 .env
 
-# Data & DB
+# Database and persistent storage (preventing local data from being committed)
 *.db
 *.duckdb
 *.duckdb.wal
 
-# dbt (menggunakan path agar lebih spesifik)
+# dbt artifacts and dependencies
 dbt_project/dbt_packages/
 dbt_project/logs/
 dbt_project/target/
+logs/
 
-# OS
+# System-specific files
 .DS_Store

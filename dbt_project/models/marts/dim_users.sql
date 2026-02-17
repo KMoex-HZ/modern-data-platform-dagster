@@ -8,7 +8,7 @@ select
     address,
     created_at,
     effective_date,
-    -- Kita kasih tanda apakah ini data terbaru atau bukan
+    -- Labeling the data to distinguish between current and historical records
     case 
         when expiry_date is null then 'Active'
         else 'Historical'

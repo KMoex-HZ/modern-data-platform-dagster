@@ -6,10 +6,12 @@ services:
     container_name: project_4_platform
     restart: always
     volumes:
-      - ./:/opt/dagster/app # Sync kodingan Laptop <-> Docker (Hot Reload)
+      # Synchronize local source code with the container for development (Hot Reload)
+      - ./:/opt/dagster/app
     ports:
       - "3000:3000"
     environment:
+      # Database credentials with default fallbacks for local development
       - DAGSTER_POSTGRES_USER=${DAGSTER_POSTGRES_USER:-postgres}
       - DAGSTER_POSTGRES_PASSWORD=${DAGSTER_POSTGRES_PASSWORD:-password}
       - DAGSTER_POSTGRES_DB=${DAGSTER_POSTGRES_DB:-postgres}
@@ -17,4 +19,5 @@ services:
       - .env
 
 volumes:
+  # Persistent volume for Dagster internal metadata
   dagster_data:

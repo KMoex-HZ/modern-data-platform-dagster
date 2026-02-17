@@ -7,7 +7,8 @@ renamed as (
         order_id,
         user_id,
         product_id,
-        amount as quantity, -- Kita aliaskan biar standar DE
+        -- Aliasing for naming standardization according to DE best practices
+        amount as quantity,
         cast(order_date as timestamp) as order_at
     from source
 )

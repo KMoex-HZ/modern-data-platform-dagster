@@ -14,7 +14,8 @@ select
     p.category,
     o.quantity,
     p.price,
-    (o.quantity * p.price) as total_amount, -- Kita hitung total belanjanya
+    -- Calculating the total transaction value per order
+    (o.quantity * p.price) as total_amount,
     o.order_at
 from orders o
 left join products p on o.product_id = p.product_id

@@ -3,7 +3,8 @@ dbt_project:
   outputs:
     dev:
       type: duckdb
-      # Path ini fleksibel: Kalau di Docker pake env, kalau di local pake path relatif
+      # Dynamic path configuration: Supports environment variables for Docker/CI
+      # and falls back to a relative local path for development.
       path: "{{ env_var('DUCKDB_PATH', '../analytics.duckdb') }}"
       schema: main
       threads: 1

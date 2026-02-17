@@ -1,3 +1,5 @@
 data_source analytics:
   type: duckdb
-  path: /home/caelan/projects/modern-data-platform-dagster/analytics.duckdb
+  # Using environment variables for the database path to ensure portability
+  # across local, Docker, and CI/CD environments.
+  path: ${DUCKDB_PATH:-analytics.duckdb}

@@ -1,28 +1,28 @@
 FROM python:3.10-slim
 
-# Setup working directory di dalam container
+# Set the working directory within the container
 WORKDIR /opt/dagster/app
 
-# Copy requirements & Install (biar cache-nya jalan)
+# Copy dependency list and install to leverage Docker layer caching
 COPY requirements.txt .
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
-# Setup Environment Variables
+# Configure Environment Variables for Dagster orchestration
 ENV DAGSTER_HOME=/opt/dagster/dagster_home
 ENV PYTHONPATH=/opt/dagster/app
 
-# Bikin folder home & app
+# Ensure required directories exist for Dagster metadata and application
 RUN mkdir -p $DAGSTER_HOME
 
-# Copy file config dagster (Nanti kita bikin di langkah 5)
+# Copy the Dagster configuration file to the defined home directory
 COPY dagster.yaml $DAGSTER_HOME/
 
-# Copy seluruh kodingan kita ke dalam container
+# Copy the entire project source code into the container
 COPY . /opt/dagster/app
 
-# Expose port UI Dagster
+# Expose the Dagster UI default port
 EXPOSE 3000
 
-# Command default pas container nyala
+# Default command to launch the Dagster development server
 CMD ["dagster", "dev", "-h", "0.0.0.0", "-p", "3000", "-m", "dagster_project"]

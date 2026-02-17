@@ -1,17 +1,17 @@
 checks for fact_orders:
-  # 1. Gak boleh ada ID order yang kosong
+  # 1. Ensure primary key integrity: order_id must not contain null values
   - missing_count(order_id) = 0
 
-  # 2. Total belanja gak boleh nol atau negatif (Gak logis soalnya)
+  # 2. Business Logic Validation: total_amount must be positive (prevents logical errors)
   - min(total_amount) > 0
 
-  # 3. Gak boleh ada ID yang duplikat
+  # 3. Uniqueness Check: prevents duplicate transactions in the fact table
   - duplicate_count(order_id) = 0
 
 checks for dim_users:
-  # 1. User name wajib ada
+  # 1. Data Completeness: user_name is mandatory for downstream reporting
   - missing_count(user_name) = 0
 
-  # 2. Status record harus 'Active' atau 'Historical'
+  # 2. Validity Check: Ensures record_status adheres to the defined SCD Type 2 schema
   - invalid_count(record_status) = 0:
       valid values: ["Active", "Historical"]

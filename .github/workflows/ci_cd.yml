@@ -1,39 +1,44 @@
-name: Data Pipeline CI
+name: Data Engineering Pipeline CI
 on: [push]
 
 jobs:
-  data-quality-check:
+  data-pipeline-validation:
+    name: Build and Validate Data Pipeline
     runs-on: ubuntu-latest
+
+    # Defining environment variables for the entire job
+    env:
+      DUCKDB_PATH: "${{ github.workspace }}/analytics.duckdb"
+
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Configure Python Environment
         uses: actions/setup-python@v4
         with:
           python-version: "3.12"
 
-      - name: Install dependencies
+      - name: Install Project Dependencies
         run: |
           pip install dbt-duckdb soda-core-duckdb pandas faker duckdb pyarrow sqlalchemy duckdb-engine setuptools
 
-      - name: Ingest & Build Data
+      - name: Execute Data Ingestion & Transformation
         run: |
-          # Jalanin generator (Bikin analytics.duckdb di root)
+          # Execute synthetic data generator
           python dagster_project/fake_data_gen.py
 
-          # Masuk ke dbt
+          # Execute dbt snapshots and models
           cd dbt_project
           dbt snapshot --profiles-dir .
           dbt run --profiles-dir .
 
-      - name: Quality Check
+      - name: Execute Soda Quality Scans
         run: |
-          # Sesuaikan path di configuration.yml secara dinamis buat GitHub
-          sed -i 's|path:.*|path: /home/runner/work/modern-data-platform-dagster/modern-data-platform-dagster/analytics.duckdb|' soda/configuration.yml
+          # No manual path patching needed thanks to environment variables
           soda scan -d analytics -c soda/configuration.yml soda/checks.yml
 
-      - name: Generate dbt Docs
+      - name: Generate dbt Documentation
         run: |
           cd dbt_project
           dbt docs generate --profiles-dir .

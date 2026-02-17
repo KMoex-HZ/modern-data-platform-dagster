@@ -23,26 +23,18 @@ def generate_and_save_data():
     df_products = pd.DataFrame(products)
     df_orders = pd.DataFrame(orders)
 
-    # 2. SIMPAN KE DUCKDB (Lebih aman buat GitHub Actions)
-    con = duckdb.connect(db_path)
+    # 2. SIMPAN KE DUCKDB (Versi Paling Stabil buat GitHub Actions)
+    import sqlalchemy # Kita pake bantuan sqlalchemy (biasanya ikut keinstall pas install dbt-duckdb)
     
-    # Daftarkan dataframe sebagai view sementara agar DuckDB bisa baca
-    con.register("df_users_temp", df_users)
-    con.register("df_products_temp", df_products)
-    con.register("df_orders_temp", df_orders)
-
-    # Buat tabel asli dari view tersebut
-    con.execute("CREATE TABLE IF NOT EXISTS raw_users AS SELECT * FROM df_users_temp")
-    con.execute("CREATE TABLE IF NOT EXISTS raw_products AS SELECT * FROM df_products_temp")
-    con.execute("CREATE TABLE IF NOT EXISTS raw_orders AS SELECT * FROM df_orders_temp")
+    # Bikin koneksi via SQLAlchemy engine
+    engine = sqlalchemy.create_engine(f"duckdb:///{db_path}")
     
-    # Refresh data jika sudah ada
-    con.execute("OR REPLACE TABLE raw_users AS SELECT * FROM df_users_temp")
-    con.execute("OR REPLACE TABLE raw_products AS SELECT * FROM df_products_temp")
-    con.execute("OR REPLACE TABLE raw_orders AS SELECT * FROM df_orders_temp")
+    # Tulis data pake pandas to_sql (Ini 100% aman dari error 'str not recognized')
+    df_users.to_sql("raw_users", engine, if_exists="replace", index=False)
+    df_products.to_sql("raw_products", engine, if_exists="replace", index=False)
+    df_orders.to_sql("raw_orders", engine, if_exists="replace", index=False)
     
-    con.close()
-    print(f"✅ Success: Data ingested into {db_path}")
+    print(f"✅ Success: Data ingested into {db_path} using SQLAlchemy engine")
 
 if __name__ == "__main__":
     generate_and_save_data()

@@ -105,44 +105,25 @@ _(Figure 2: The dbt Lineage Graph generated from the project manifest)_
 
 ```text
 modern-data-platform-dagster/
-├── .github/workflows/       # CI/CD Pipelines (Automated Testing)
-│   └── ci_cd.yml
-├── assets/                  # Project Documentation Images
-│   └── dbt-lineage.png      # Lineage Graph Screenshot
-├── dagster_project/         # Orchestration & Ingestion Logic
-│   ├── __init__.py
-│   └── fake_data_gen.py     # Data Generation Script
-├── dbt_project/             # Transformation Layer
-│   ├── analyses/            # (.gitkeep) Ad-hoc SQL queries
-│   ├── macros/              # (.gitkeep) Reusable SQL functions
-│   ├── models/              # Staging & Marts logic
-│   │   ├── marts/
-│   │   │   ├── dim_users.sql
-│   │   │   └── fact_orders.sql
-│   │   └── staging/
-│   │   │   ├── stg_orders.sql
-│   │   │   ├── stg_products.sql
-│   │   │   ├── stg_users.sql
-│   │   │   └── sources.yml
-│   ├── seeds/
-│   ├── snapshots/ # SCD Type 2 logic
-│   │   └── users_snapshot.sql
-│   ├── tests/ # Singular dbt tests (Custom SQL)
-│   │   └── assert_total_amount_positive.sql
-│   ├── .user.yml
-│   ├── dbt_project.yml      # dbt Configuration
-│   └── profiles.yml         # Connection profiles (Env var dynamic)
-├── soda/                    # Data Quality Configuration
-│   ├── checks.yml           # Data Contracts
-│   └── configuration.yml    # Soda-DuckDB connection
-├── .gitignore
-├── dagster.yaml
-├── docker-compose.yml
-├── Dockerfile
-├── Makefile
-├── requirements.txt         # Python Dependencies
-└── README.md                # Documentation
-
+├── .github/workflows/       # Automated CI/CD & Data Quality Guardrails (GitHub Actions)
+│   └── ci_cd.yml            # Environment-agnostic pipeline for testing & validation
+├── assets/                  # Documentation artifacts & visualization
+│   └── dbt-lineage.png      # High-level DAG of the transformation lifecycle
+├── dagster_project/         # Asset-Based Orchestration & Ingestion Layer
+│   ├── __init__.py          # Dagster asset definitions and orchestration metadata
+│   └── fake_data_gen.py     # Synthetic transaction engine (SQLAlchemy + Faker)
+├── dbt_project/             # Analytics Engineering Layer (SCD Type 2 & Modeling)
+│   ├── models/              # Modular SQL logic (Staging, Snapshots, & Marts)
+│   ├── snapshots/           # Slowly Changing Dimensions (SCD Type 2) history tracking
+│   ├── tests/               # Custom business logic & data integrity assertions
+│   ├── dbt_project.yml      # Transformation metadata & project configuration
+│   └── profiles.yml         # Dynamic connection profiles (Env var-driven for portability)
+├── soda/                    # Data Contract & Governance Layer
+│   ├── checks.yml           # Declarative quality thresholds (Soda Checks)
+│   └── configuration.yml    # Data source connectivity with path-injection placeholder
+├── docker-compose.yml       # Containerized environment orchestration
+├── requirements.txt         # Production-grade Python dependencies
+└── README.md                # Technical documentation & architecture deep-dive
 ```
 
 ---

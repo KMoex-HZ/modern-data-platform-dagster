@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  data-platform:
+    build: .
+    container_name: project_4_platform
+    restart: always
+    volumes:
+      - ./:/opt/dagster/app # Sync kodingan Laptop <-> Docker (Hot Reload)
+    ports:
+      - "3000:3000"
+    environment:
+      - DAGSTER_POSTGRES_USER=postgres
+      - DAGSTER_POSTGRES_PASSWORD=password
+      - DAGSTER_POSTGRES_DB=postgres
+    env_file:
+      - .env
+
+volumes:
+  dagster_data:

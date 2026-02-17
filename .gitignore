@@ -1,0 +1,18 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+.env
+
+# Data & DB
+*.db
+*.duckdb
+*.duckdb.wal
+
+# dbt (menggunakan path agar lebih spesifik)
+dbt_project/dbt_packages/
+dbt_project/logs/
+dbt_project/target/
+
+# OS
+.DS_Store

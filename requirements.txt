@@ -1,0 +1,11 @@
+dagster
+dagster-webserver
+dagster-duckdb
+dagster-dbt
+dbt-duckdb
+duckdb
+pandas
+faker
+python-dotenv
+soda-core
+soda-core-duckdb

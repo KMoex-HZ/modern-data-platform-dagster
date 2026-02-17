@@ -1,0 +1,10 @@
+# profiles.yml
+dbt_project:
+  outputs:
+    dev:
+      type: duckdb
+      # Path ini fleksibel: Kalau di Docker pake env, kalau di local pake path relatif
+      path: "{{ env_var('DUCKDB_PATH', '../analytics.duckdb') }}"
+      schema: main
+      threads: 1
+  target: dev

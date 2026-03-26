@@ -180,7 +180,7 @@ This project is built with **Production-Grade** standards in mind:
 
 ---
 
-**Author:** Caelan Zhou
+**Author:** Khairunnisa Maharani
 
 **Role:** Data Engineer / Data Science Student @ ITERA
 
